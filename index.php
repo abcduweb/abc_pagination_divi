@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: ABC Pagination Divi
- * Plugin URI: https://abcduweb.fr/abc-pagination-divi/
+ * Plugin URI: https://abcduweb.fr/abc-pagination/
  * Description: Améliore la pagination pour Divi avec des options de personnalisation avancées et un meilleur SEO
  * Version: 1.0.0
  * Author: ABCduWeb
