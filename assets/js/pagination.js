@@ -1,6 +1,9 @@
 jQuery(document).ready(function($) {
     'use strict';
     
+    console.log('DEP Debug - JavaScript chargé et prêt');
+    console.log('DEP Debug - URL actuelle:', window.location.href);
+    
     // Variables globales
     let isLoading = false;
     let currentPage = 1;
@@ -10,6 +13,10 @@ jQuery(document).ready(function($) {
     initPagination();
     
     function initPagination() {
+        // Debug : vérifier les options reçues
+        console.log('DEP Debug - depOptions:', depOptions);
+        console.log('DEP Debug - AJAX activé:', depOptions?.ajax_pagination);
+        
         // Récupérer les informations de pagination depuis la page
         const pageInfo = $('.page-info').text();
         const match = pageInfo.match(/Page (\d+) sur (\d+)/);
@@ -19,34 +26,50 @@ jQuery(document).ready(function($) {
         }
         
         // Activer la pagination AJAX si activée
-        if (depOptions.ajax_pagination) {
+        if (depOptions && depOptions.ajax_pagination) {
+            console.log('DEP Debug - Activation de la pagination AJAX');
             enableAjaxPagination();
         }
         
         // Activer le défilement infini si activé
-        if (depOptions.infinite_scroll) {
+        if (depOptions && depOptions.infinite_scroll) {
+            console.log('DEP Debug - Activation du défilement infini');
             enableInfiniteScroll();
         }
         
         // Activer le bouton "Charger plus" si activé
-        if (depOptions.load_more_button) {
+        if (depOptions && depOptions.load_more_button) {
+            console.log('DEP Debug - Activation du bouton charger plus');
             enableLoadMore();
         }
     }
     
     function enableAjaxPagination() {
+        console.log('DEP Debug - enableAjaxPagination appelée (VERSION CORRIGÉE)');
         $('.dep-pagination .page-numbers').on('click', function(e) {
+            console.log('DEP Debug - Clic sur un lien de pagination détecté (VERSION CORRIGÉE)');
             e.preventDefault();
             
             if (isLoading || $(this).hasClass('current') || $(this).hasClass('dots')) {
+                console.log('DEP Debug - Clic ignoré (loading/current/dots)');
                 return;
             }
             
             const href = $(this).attr('href');
-            const url = new URL(href);
-            const page = url.searchParams.get('paged') || url.pathname.match(/\/page\/(\d+)/);
+            console.log('DEP Debug - href:', href);
+            
+            // Extraire le numéro de page directement du href
+            let page;
+            const pathMatch = href.match(/\/page\/(\d+)/);
+            if (pathMatch) {
+                page = pathMatch[1];
+            } else {
+                const urlParams = new URLSearchParams(href.split('?')[1] || '');
+                page = urlParams.get('paged');
+            }
             
             if (page) {
+                console.log('DEP Debug - Chargement de la page:', page);
                 loadPage(page, false);
             }
         });
@@ -109,16 +132,24 @@ jQuery(document).ready(function($) {
         // Gérer différents formats d'URL
         let pageUrl;
         if (url.pathname.includes('/page/')) {
-            pageUrl = url.pathname.replace(/\/page\/\d+/, '/page/' + page) + url.search;
+            pageUrl = url.origin + url.pathname.replace(/\/page\/\d+/, '/page/' + page) + url.search;
         } else {
-            pageUrl = url.pathname + '/page/' + page + url.search;
+            pageUrl = url.origin + url.pathname + '/page/' + page + url.search;
         }
+        
+        console.log('DEP Debug - URL construite:', pageUrl);
         
         // Requête AJAX pour charger le contenu
         $.ajax({
             url: pageUrl,
             type: 'GET',
             dataType: 'html',
+            cache: false, // Désactiver le cache pour AJAX
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            },
             success: function(response) {
                 const $response = $(response);
                 const newContent = $response.find('.et_pb_post, .post, article').length > 0 ? 

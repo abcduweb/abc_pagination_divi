@@ -25,7 +25,7 @@ class ABC_Pagination_Divi {
         // Charger JavaScript AJAX si activé
         if (get_option('dep_enable_plugin', true)) {
             wp_enqueue_script('jquery');
-            wp_enqueue_script('dep-pagination', plugins_url('assets/js/pagination.js', __FILE__), array('jquery'), '1.0.0', true);
+            wp_enqueue_script('dep-pagination', plugins_url('assets/js/pagination.js', __FILE__) . '?v=' . time(), array('jquery'), '1.0.1', true);
             
             // Passer les options au JavaScript
             wp_localize_script('dep-pagination', 'depOptions', array(
@@ -33,13 +33,25 @@ class ABC_Pagination_Divi {
                 'infinite_scroll' => get_option('dep_infinite_scroll', false),
                 'load_more_button' => get_option('dep_load_more_button', false),
                 'load_more_text' => get_option('dep_load_more_text', 'Charger plus'),
-                'loading_text' => get_option('dep_loading_text', 'Chargement...')
+                'loading_text' => get_option('dep_loading_text', 'Chargement...'),
+                'debug' => array(
+                    'ajax_option' => get_option('dep_ajax_pagination', 'NOT_FOUND'),
+                    'infinite_option' => get_option('dep_infinite_scroll', 'NOT_FOUND'),
+                    'load_more_option' => get_option('dep_load_more_button', 'NOT_FOUND')
+                )
             ));
         }
     }
     
     public function add_styles() {
         if (get_option('dep_enable_plugin', true)) {
+            // Désactiver le cache si AJAX est activé
+            if (get_option('dep_ajax_pagination', false)) {
+                header('Cache-Control: no-cache, no-store, must-revalidate');
+                header('Pragma: no-cache');
+                header('Expires: 0');
+            }
+            
             // Récupérer les valeurs d'espacement
             $margin_top = get_option('dep_margin_top', '40');
             $margin_bottom = get_option('dep_margin_bottom', '40');
@@ -397,11 +409,35 @@ class ABC_Pagination_Divi {
         register_setting('dep_settings', 'dep_load_more_text');
         register_setting('dep_settings', 'dep_loading_text');
         
+        // Vider le cache quand les options AJAX sont modifiées
+        add_action('update_option_dep_ajax_pagination', array($this, 'clear_cache_on_ajax_change'));
+        add_action('update_option_dep_infinite_scroll', array($this, 'clear_cache_on_ajax_change'));
+        add_action('update_option_dep_load_more_button', array($this, 'clear_cache_on_ajax_change'));
+        
         // Ajouter les champs hexadécimaux
         add_filter('pre_update_option_dep_primary_color', array($this, 'update_color_from_hex'), 10, 2);
         add_filter('pre_update_option_dep_bg_color', array($this, 'update_color_from_hex'), 10, 2);
         add_filter('pre_update_option_dep_border_color', array($this, 'update_color_from_hex'), 10, 2);
         add_filter('pre_update_option_dep_text_color', array($this, 'update_color_from_hex'), 10, 2);
+    }
+    
+    public function clear_cache_on_ajax_change() {
+        // Vider tous les caches quand les options AJAX changent
+        if (function_exists('wp_cache_flush')) {
+            wp_cache_flush();
+        }
+        
+        // Vider le cache des plugins populaires
+        if (function_exists('w3tc_flush_all')) {
+            w3tc_flush_all();
+        }
+        if (function_exists('wp_fast_cache_bulk_delete_all')) {
+            wp_fast_cache_bulk_delete_all();
+        }
+        
+        // Forcer la regénération des fichiers CSS/JS
+        wp_enqueue_scripts();
+        wp_enqueue_styles();
     }
     
     public function update_color_from_hex($new_value, $old_value) {
