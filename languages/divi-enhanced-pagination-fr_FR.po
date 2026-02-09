@@ -1,0 +1,113 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ABC Pagination Divi 1.0.0\n"
+"Report-Msgid-Bugs-To: https://abcduweb.fr\n"
+"POT-Creation-Date: 2025-02-08T20:00:00+00:00\n"
+"PO-Revision-Date: 2025-02-08T20:00:00+00:00\n"
+"Last-Translator: ABCduWeb <contact@abcduweb.fr>\n"
+"Language-Team: ABCduWeb <contact@abcduweb.fr>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,4c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: divi-enhanced-pagination.php:42
+msgid "ABC Pagination Divi Settings"
+msgstr "Paramètres de ABC Pagination Divi"
+
+#: divi-enhanced-pagination.php:43
+msgid "ABC Pagination Divi"
+msgstr "ABC Pagination Divi"
+
+#: divi-enhanced-pagination.php:48
+msgid "ABC Pagination Divi"
+msgstr "ABC Pagination Divi"
+
+#: divi-enhanced-pagination.php:55
+msgid "Style de pagination"
+msgstr "Style de pagination"
+
+#: divi-enhanced-pagination.php:59
+msgid "Type de pagination"
+msgstr "Type de pagination"
+
+#: divi-enhanced-pagination.php:62
+msgid "Numéros + Suivant/Précédent"
+msgstr "Numéros + Suivant/Précédent"
+
+#: divi-enhanced-pagination.php:63
+msgid "Suivant/Précédent uniquement"
+msgstr "Suivant/Précédent uniquement"
+
+#: divi-enhanced-pagination.php:64
+msgid "Numéros uniquement"
+msgstr "Numéros uniquement"
+
+#: divi-enhanced-pagination.php:70
+msgid "Texte \"Précédent\""
+msgstr "Texte \"Précédent\""
+
+#: divi-enhanced-pagination.php:77
+msgid "Texte \"Suivant\""
+msgstr "Texte \"Suivant\""
+
+#: divi-enhanced-pagination.php:84
+msgid "Afficher \"Page X sur Y\""
+msgstr "Afficher \"Page X sur Y\""
+
+#: divi-enhanced-pagination.php:94
+msgid "Options avancées"
+msgstr "Options avancées"
+
+#: divi-enhanced-pagination.php:98
+msgid "Pagination AJAX (sans rechargement)"
+msgstr "Pagination AJAX (sans rechargement)"
+
+#: divi-enhanced-pagination.php:105
+msgid "Défilement infini"
+msgstr "Défilement infini"
+
+#: divi-enhanced-pagination.php:112
+msgid "Bouton \"Charger plus\""
+msgstr "Bouton \"Charger plus\""
+
+#: divi-enhanced-pagination.php:119
+msgid "Texte du bouton \"Charger plus\""
+msgstr "Texte du bouton \"Charger plus\""
+
+#: divi-enhanced-pagination.php:126
+msgid "Texte de chargement"
+msgstr "Texte de chargement"
+
+#: includes/seo-functions.php:95
+msgid "Découvrez nos articles - Page %d sur %d. %s"
+msgstr "Découvrez nos articles - Page %d sur %d. %s"
+
+#: includes/seo-functions.php:101
+msgid "Articles dans la catégorie %s - Page %d sur %d. %s"
+msgstr "Articles dans la catégorie %s - Page %d sur %d. %s"
+
+#: includes/seo-functions.php:107
+msgid "Articles avec le tag %s - Page %d sur %d. %s"
+msgstr "Articles avec le tag %s - Page %d sur %d. %s"
+
+#: includes/seo-functions.php:113
+msgid "Résultats de recherche pour \"%s\" - Page %d sur %d. %s"
+msgstr "Résultats de recherche pour \"%s\" - Page %d sur %d. %s"
+
+#: includes/seo-functions.php:119
+msgid "Page %d sur %d - %s"
+msgstr "Page %d sur %d - %s"
+
+#: index.php:35
+msgid "Ce plugin nécessite PHP 7.4 ou supérieur."
+msgstr "Ce plugin nécessite PHP 7.4 ou supérieur."
+
+#: index.php:41
+msgid "Ce plugin nécessite WordPress 5.0 ou supérieur."
+msgstr "Ce plugin nécessite WordPress 5.0 ou supérieur."
