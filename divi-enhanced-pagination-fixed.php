@@ -14,7 +14,8 @@ class ABC_Pagination_Divi_Fixed {
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_action('wp_head', array($this, 'add_styles'));
         add_action('wp_footer', array($this, 'add_pagination_script'));
-        add_action('admin_menu', array($this, 'add_admin_menu'));
+        // Menu désactivé pour éviter les conflits avec le fichier principal
+        // add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_init', array($this, 'register_settings'));
         
         // UN SEUL HOOK simple pour éviter les boucles infinies
@@ -430,10 +431,10 @@ class ABC_Pagination_Divi_Fixed {
     
     public function add_admin_menu() {
         add_options_page(
-            'Pagination Divi',
-            'Pagination Divi',
+            'ABC Pagination Divi',
+            'ABC Pagination',
             'manage_options',
-            'divi-enhanced-pagination',
+            'abc-pagination-divi-fixed',
             array($this, 'admin_page')
         );
     }
