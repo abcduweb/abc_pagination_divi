@@ -436,8 +436,17 @@ class ABC_Pagination_Divi {
         }
         
         // Forcer la regénération des fichiers CSS/JS
-        wp_enqueue_scripts();
-        wp_enqueue_styles();
+        // Supprimer les fichiers CSS/JS en cache si possible
+        $upload_dir = wp_upload_dir();
+        $cache_dir = $upload_dir['basedir'] . '/cache';
+        if (is_dir($cache_dir)) {
+            $files = glob($cache_dir . '/*');
+            foreach ($files as $file) {
+                if (is_file($file)) {
+                    unlink($file);
+                }
+            }
+        }
     }
     
     public function update_color_from_hex($new_value, $old_value) {
