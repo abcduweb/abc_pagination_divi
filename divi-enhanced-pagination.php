@@ -21,6 +21,21 @@ class ABC_Pagination_Divi {
     public function enqueue_scripts() {
         // Charger CSS partout
         wp_enqueue_style('dep-style', plugins_url('assets/css/pagination.css', __FILE__), array(), '1.0.0');
+        
+        // Charger JavaScript AJAX si activé
+        if (get_option('dep_enable_plugin', true)) {
+            wp_enqueue_script('jquery');
+            wp_enqueue_script('dep-pagination', plugins_url('assets/js/pagination.js', __FILE__), array('jquery'), '1.0.0', true);
+            
+            // Passer les options au JavaScript
+            wp_localize_script('dep-pagination', 'depOptions', array(
+                'ajax_pagination' => get_option('dep_ajax_pagination', false),
+                'infinite_scroll' => get_option('dep_infinite_scroll', false),
+                'load_more_button' => get_option('dep_load_more_button', false),
+                'load_more_text' => get_option('dep_load_more_text', 'Charger plus'),
+                'loading_text' => get_option('dep_loading_text', 'Chargement...')
+            ));
+        }
     }
     
     public function add_styles() {
@@ -202,7 +217,18 @@ class ABC_Pagination_Divi {
                     }
                 }
                 
-                $pagination_html .= '</div>';
+                // Bouton "Charger plus" si activé
+                if (get_option('dep_load_more_button', false) && $current < $total) {
+                    $load_more_text = get_option('dep_load_more_text', 'Charger plus');
+                    $next_url = get_pagenum_link($current + 1);
+                    $pagination_html .= '</div>';
+                    $pagination_html .= '<div class="dep-load-more-wrapper">';
+                    $pagination_html .= '<button class="dep-load-more-btn" data-next-page="' . ($current + 1) . '" data-url="' . esc_url($next_url) . '">' . esc_html($load_more_text) . '</button>';
+                    $pagination_html .= '</div>';
+                } else {
+                    $pagination_html .= '</div>';
+                }
+                
                 $pagination_html .= '</nav>';
                 
                 // Afficher la pagination et utiliser JavaScript pour la positionner
@@ -364,6 +390,13 @@ class ABC_Pagination_Divi {
         register_setting('dep_settings', 'dep_padding_top');
         register_setting('dep_settings', 'dep_padding_bottom');
         
+        // Options AJAX
+        register_setting('dep_settings', 'dep_ajax_pagination');
+        register_setting('dep_settings', 'dep_infinite_scroll');
+        register_setting('dep_settings', 'dep_load_more_button');
+        register_setting('dep_settings', 'dep_load_more_text');
+        register_setting('dep_settings', 'dep_loading_text');
+        
         // Ajouter les champs hexadécimaux
         add_filter('pre_update_option_dep_primary_color', array($this, 'update_color_from_hex'), 10, 2);
         add_filter('pre_update_option_dep_bg_color', array($this, 'update_color_from_hex'), 10, 2);
@@ -486,6 +519,75 @@ class ABC_Pagination_Divi {
                             <br><br>
                             <label for="dep_text_color_hex">Ou code hexadécimal :</label>
                             <input type="text" name="dep_text_color_hex" id="dep_text_color_hex" value="<?php echo esc_attr(get_option('dep_text_color', '#495057')); ?>" placeholder="#495057" pattern="^#[0-9A-Fa-f]{6}$" class="regular-text">
+                            <p class="description">Choisissez une couleur ou entrez un code hexadécimal (ex: #495057)</p>
+                        </td>
+                    </tr>
+                </table>
+                
+                <h2>Options avancées</h2>
+                <?php
+                // Debug : vérifier si les options existent
+                $ajax_pagination = get_option('dep_ajax_pagination', 'NOT_FOUND');
+                $infinite_scroll = get_option('dep_infinite_scroll', 'NOT_FOUND');
+                $load_more_button = get_option('dep_load_more_button', 'NOT_FOUND');
+                
+                if ($ajax_pagination === 'NOT_FOUND') {
+                    echo '<div style="background: #ffeb3b; padding: 10px; margin: 10px 0; border-left: 4px solid #f9a825;">';
+                    echo '<strong>⚠️ Options AJAX non trouvées!</strong><br>';
+                    echo 'Veuillez désactiver et réactiver le plugin pour créer les options manquantes.';
+                    echo '</div>';
+                }
+                ?>
+                <table class="form-table">
+                    <tr>
+                        <th>
+                            <label>
+                                <input type="checkbox" name="dep_ajax_pagination" value="1" <?php checked(get_option('dep_ajax_pagination', 0)); ?>>
+                                Pagination AJAX (sans rechargement)
+                            </label>
+                        </th>
+                        <td>
+                            <p class="description">Navigation sans rechargement de page</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th>
+                            <label>
+                                <input type="checkbox" name="dep_infinite_scroll" value="1" <?php checked(get_option('dep_infinite_scroll', 0)); ?>>
+                                Défilement infini
+                            </label>
+                        </th>
+                        <td>
+                            <p class="description">Chargement automatique au scroll</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th>
+                            <label>
+                                <input type="checkbox" name="dep_load_more_button" value="1" <?php checked(get_option('dep_load_more_button', 0)); ?>>
+                                Bouton "Charger plus"
+                            </label>
+                        </th>
+                        <td>
+                            <p class="description">Alternative au défilement infini</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th><label for="dep_load_more_text">Texte du bouton "Charger plus"</label></th>
+                        <td>
+                            <input type="text" name="dep_load_more_text" id="dep_load_more_text" value="<?php echo esc_attr(get_option('dep_load_more_text', 'Charger plus')); ?>" class="regular-text">
+                            <p class="description">Texte pour le bouton charger plus</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th><label for="dep_loading_text">Texte de chargement</label></th>
+                        <td>
+                            <input type="text" name="dep_loading_text" id="dep_loading_text" value="<?php echo esc_attr(get_option('dep_loading_text', 'Chargement...')); ?>" class="regular-text">
+                            <p class="description">Texte affiché pendant le chargement</p>
                         </td>
                     </tr>
                 </table>
