@@ -44,7 +44,7 @@ Un plugin WordPress complet pour améliorer la pagination dans le thème Divi av
 - **Textes personnalisés** : Modifiez les libellés des boutons
 - **Informations de page** : Activez/désactivez l'affichage "Page X sur Y"
 
-### Options avancées
+### Options avancées (en cours de développement)
 - **Pagination AJAX** : Navigation sans rechargement
 - **Défilement infini** : Chargement automatique au scroll
 - **Bouton "Charger plus"** : Alternative au défilement infini

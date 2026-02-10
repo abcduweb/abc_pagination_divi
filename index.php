@@ -35,7 +35,6 @@ if (version_compare($GLOBALS['wp_version'], '5.0', '<')) {
 }
 
 // Inclusion des fichiers du plugin
-require_once plugin_dir_path(__FILE__) . 'divi-enhanced-pagination.php';
 require_once plugin_dir_path(__FILE__) . 'divi-enhanced-pagination-fixed.php';
 require_once plugin_dir_path(__FILE__) . 'includes/seo-functions.php';
 
@@ -62,13 +61,7 @@ function dep_activate() {
         'dep_margin_bottom' => '40',
         'dep_padding_top' => '0',
         'dep_padding_bottom' => '0',
-        'dep_posts_per_page' => '',
-        // Options AJAX par défaut
-        'dep_ajax_pagination' => false,
-        'dep_infinite_scroll' => false,
-        'dep_load_more_button' => false,
-        'dep_load_more_text' => 'Charger plus',
-        'dep_loading_text' => 'Chargement...'
+        'dep_posts_per_page' => ''
     );
     
     foreach ($defaults as $option => $value) {
